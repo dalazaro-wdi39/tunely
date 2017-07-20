@@ -13,6 +13,13 @@ $(document).ready(function() {
     url: '/api/albums',
     success: renderMultipleAlbums
   });
+
+  $('#albumForm').on('submit', function(e){
+    e.preventDefault();
+    var data = $(this).serialize();
+    console.log(data);
+  });
+
 });
 
 function renderMultipleAlbums(albums) {
