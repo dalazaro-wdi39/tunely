@@ -33,8 +33,18 @@ function renderMultipleAlbums(albums) {
   });
 }
 
+// NOTE: from solution: function that formats each song into a span
+function renderSong(song){
+  return `<span>&ndash; (${song.trackNumber}) ${song.name} &ndash;</span>`
+}
+
 function renderAlbum(album) {
   console.log('rendering album', album);
+
+  // NOTE: from solution: mapped an array of HTML strings using the renderSong function, and joined them together in a string
+
+  album.songsHtml = album.songs.map(renderSong).join("");
+
   var albumHtml = (`
     <div class="row album">
 
@@ -64,6 +74,11 @@ function renderAlbum(album) {
                   <li class="list-group-item">
                     <h4 class='inline-header'>Released date:</h4>
                     <span class='album-releaseDate'>${album.releaseDate}</span>
+                  </li>
+
+                  <li class="list-group-item">
+                    <h4 class="inline-header">Songs:</h4>
+                    ${album.songsHtml}
                   </li>
                 </ul>
               </div>
