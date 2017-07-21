@@ -25,6 +25,16 @@ $(document).ready(function() {
     });
     $(this).trigger("reset");
   });
+
+  // NOTE: from solutions: event handler for Add Song button
+  $('#albums').on('click', '.add-song', function(e) {
+    console.log('add-song clicked!');
+    var id = $(this).closest('.album').data('album-id'); // "5665ff1678209c64e51b4e7b"
+    console.log('id', id);
+    $('#songModal').data('album-id', id);
+    $('#songModal').modal();  // display the modal
+  });
+
 });
 
 function renderMultipleAlbums(albums) {
@@ -46,7 +56,7 @@ function renderAlbum(album) {
   album.songsHtml = album.songs.map(renderSong).join("");
 
   var albumHtml = (`
-    <div class="row album">
+    <div class="row album" data-album-id="${album._id}">
 
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
@@ -87,6 +97,7 @@ function renderAlbum(album) {
             <!-- end of album internal row -->
 
             <div class='panel-footer'>
+              <button class='btn btn-primary add-song'>Add Song</button>
             </div>
 
           </div>
@@ -96,4 +107,4 @@ function renderAlbum(album) {
     <!-- end one album -->
   `);
   $('#albums').prepend(albumHtml);
-}
+};
