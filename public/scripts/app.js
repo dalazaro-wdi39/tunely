@@ -18,6 +18,17 @@ $(document).ready(function() {
     e.preventDefault();
     var data = $(this).serialize();
     console.log(data);
+
+    $.ajax({
+      method: 'POST',
+      url: '/api/albums',
+      success: function(album) {
+        console.log('album after POST', album);
+        renderAlbum(album);  //render the server's response
+      }
+    });
+
+    $(this).trigger("reset");
   });
 
 });
