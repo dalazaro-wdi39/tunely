@@ -1,6 +1,13 @@
 // albumsSongsController
 var db = require('../models');
 
+// NOTE: song index
+function index(req, res) {
+  db.Album.findById(req.params.albumId, function(err, foundAlbum) {
+    console.log('responding with songs:', foundAlbum.songs);
+    res.json(foundAlbum.songs);
+  });
+}
 
 // POST '/api/albums/:albumId/songs'
 function create(req, res) {
@@ -15,7 +22,46 @@ function create(req, res) {
   });
 }
 
+// NOTE: delete songs
+function destroy(req, res) {
+  db.Album.findById(req.params.albumId, function(err, foundAlbum) {
+    console.log(foundAlbum);
+    var correctSong = foundAlbum.songs.id(req.params.songId);
+    if (correctSong) {
+      correctSong.remove();
+      foundAlbum.save(function(err, saved) {
+        console.log('REMOVED ', correctSong.name, 'FROM ', saved.songs);
+        res.json(correctSong);
+      });
+    } else {
+      res.send(404);
+    }
+  });
+}
+
+// NOTE: update album song
+function update(req, res) {
+  db.Album.findById(req.params.albumId, function(err, foundAlbum) {
+    console.log(foundAlbum);
+    var correctSong = foundAlbum.songs.id(req.params.songId);
+    if (correctSong) {
+      console.log(req.body);
+      correctSong.trackNumber = req.body.trackNumber;
+      correctSong.name = req.body.name;
+      foundAlbum.save(function(err, saved) {
+        console.log('UPDATED', correctSong, 'IN ', saved.songs);
+        res.json(correctSong);
+      });
+    } else {
+      res.send(404);
+    };
+  });
+
+}
 
 module.exports = {
-  create: create
+  index: index,
+  create: create,
+  destroy: destroy,
+  update: update
 };
