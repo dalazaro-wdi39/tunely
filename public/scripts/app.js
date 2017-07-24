@@ -31,7 +31,28 @@ $(document).ready(function() {
 
   // save song modal save button
   $('#saveSong').on('click', handleNewSongSubmit);
+
+  // delete album when its delete button is clicked
+  $('#albums').on('click', '.delete-album', handleDeleteAlbumClick);
 });
+
+// when a delete button for an album is clicked
+function handleDeleteAlbumClick(e) {
+  var albumId = $(this).parents('.album').data('album-id');
+  console.log('someone wants to delete album id=' + albumId );
+  $.ajax({
+    url: '/api/albums/' + albumId,
+    method: 'DELETE',
+    success: handleDeleteAlbumSuccess
+  });
+}
+
+// callback after DELETE /api/albums/:id
+function handleDeleteAlbumSuccess(data) {
+  var deletedAlbumId = data._id;
+  console.log('removing the following album from the page:', deletedAlbumId);
+  $('div[data-album-id=' + deletedAlbumId + ']').remove();
+}
 
 function renderMultipleAlbums(albums) {
   albums.forEach(function(album) {
@@ -93,6 +114,7 @@ function renderAlbum(album) {
             <div class='panel-footer'>
               <div class='panel-footer'>
                 <button class='btn btn-primary add-song'>Add Song</button>
+                <button class='btn btn-danger delete-album'>Delete Album</button>
               </div>
 
             </div>
